@@ -1,5 +1,6 @@
 import numpy as np
 import main
+import utils
 
 
 def optimize(beta_1=0.9, beta_2=0.999, lr=0.01, eps=1e-8, max_iter=10000, tol=1e-5):
@@ -40,10 +41,10 @@ def optimize(beta_1=0.9, beta_2=0.999, lr=0.01, eps=1e-8, max_iter=10000, tol=1e
 
         if np.abs(theta - theta_prev) <= tol:
             print(' - tol')
-            print(' - found solution: {}'.format(theta))
+            utils.print_result(t, theta)
             break
         if t > max_iter:
             print(' - max iterations reached')
-            print(' - found solution: {}'.format(theta))
+            utils.print_result(t, theta)
             break
     return theta_values  # , loss_values

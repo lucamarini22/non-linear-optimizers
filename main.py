@@ -7,12 +7,12 @@ import rms_prop
 
 # function
 def f(x):
-    return np.power(x, 6) - 4*x*x + 4 *x + 2
+    return x*x*x*x*x - 4*x
 
 
 # gradient of function
 def g(x):
-    return 6*np.power(x, 5) - 8*x + 4
+    return 5*x*x*x*x - 4
 
 
 # minimum of the considered function
