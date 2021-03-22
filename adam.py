@@ -3,7 +3,7 @@ import main
 import utils
 
 
-def optimize(beta_1=0.9, beta_2=0.999, lr=0.01, eps=1e-8, max_iter=10000, tol=1e-5):
+def optimize(beta_1=0.9, beta_2=0.999, lr=0.01, eps=1e-8, max_iter=10000, tol=1e-6):
     print('adam:')
     # constants
     beta_1 = beta_1

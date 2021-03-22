@@ -3,7 +3,7 @@ import main
 import utils
 
 
-def optimize(beta=0.9, lr=0.01, eps=1e-8, max_iter=10000, tol=1e-5):
+def optimize(beta=0.9, lr=0.01, eps=1e-8, max_iter=10000, tol=1e-6):
     print('rms_prop')
     # constants
     beta = beta
