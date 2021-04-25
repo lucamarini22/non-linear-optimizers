@@ -1,9 +1,8 @@
 import numpy as np
-import main
 import utils
 
 
-def optimize(beta=0.9, lr=0.01, eps=1e-8, max_iter=10000, tol=1e-6):
+def optimize(func_grad, beta=0.9, lr=0.01, eps=1e-8, max_iter=10000, tol=1e-6):
     print('rms_prop')
     # constants
     beta = beta
@@ -22,23 +21,23 @@ def optimize(beta=0.9, lr=0.01, eps=1e-8, max_iter=10000, tol=1e-6):
     # list containing all loss values
     # loss_values = []
 
-    while True:
+    theta_prev = -10
+
+    while np.abs(theta - theta_prev) > tol and t <= max_iter:
         theta_values.append(theta)
         # loss_values.append(np.power(theta - main.y, 2))
 
-        grad = main.g(theta)
+        grad = func_grad(theta)
         s_t = beta * s_t + (1 - beta) * grad * grad
 
         theta_prev = theta
         theta = theta - (lr / (np.sqrt(s_t) + eps)) * grad
         t += 1
 
-        if np.abs(theta - theta_prev) <= tol:
-            print(' - tol')
-            utils.print_result(t, theta)
-            break
-        if t > max_iter:
-            print(' - max iterations reached')
-            utils.print_result(t, theta)
-            break
+    if np.abs(theta - theta_prev) <= tol:
+        print(' - tol')
+        utils.print_result(t, theta)
+    if t > max_iter:
+        print(' - max iterations reached')
+        utils.print_result(t, theta)
     return theta_values  # , loss_values

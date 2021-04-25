@@ -1,9 +1,8 @@
 import numpy as np
-import main
 import utils
 
 
-def optimize(beta_1=0.9, beta_2=0.999, lr=0.01, eps=1e-8, max_iter=10000, tol=1e-6):
+def optimize(func_grad, beta_1=0.9, beta_2=0.999, lr=0.01, eps=1e-8, max_iter=10000, tol=1e-6):
     print('adam:')
     # constants
     beta_1 = beta_1
@@ -23,12 +22,13 @@ def optimize(beta_1=0.9, beta_2=0.999, lr=0.01, eps=1e-8, max_iter=10000, tol=1e
     theta_values = []
     # list containing all loss values
     # loss_values = []
+    theta_prev = -10
 
-    while True:
+    while np.abs(theta - theta_prev) > tol and t <= max_iter:
         theta_values.append(theta)
         # loss_values.append(np.power(theta - main.y, 2))
 
-        grad = main.g(theta)
+        grad = func_grad(theta)
         g_t = beta_1 * g_t + (1 - beta_1) * grad
         s_t = beta_2 * s_t + (1 - beta_2) * grad * grad
 
@@ -39,12 +39,10 @@ def optimize(beta_1=0.9, beta_2=0.999, lr=0.01, eps=1e-8, max_iter=10000, tol=1e
         theta = theta - (lr / (np.sqrt(s_deb) + eps)) * g_deb
         t += 1
 
-        if np.abs(theta - theta_prev) <= tol:
-            print(' - tol')
-            utils.print_result(t, theta)
-            break
-        if t > max_iter:
-            print(' - max iterations reached')
-            utils.print_result(t, theta)
-            break
+    if np.abs(theta - theta_prev) <= tol:
+        print(' - tol')
+        utils.print_result(t, theta)
+    if t > max_iter:
+        print(' - max iterations reached')
+        utils.print_result(t, theta)
     return theta_values  # , loss_values

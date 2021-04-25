@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
 
 import adam
 import rms_prop
@@ -15,20 +14,14 @@ def f(x):
 def g(x):
     return x - 4
 
-
-# minimum of the considered function
-# y = -0.51683
-
-
 if __name__ == '__main__':
     lr = 0.1
     max_iter = 10000
     plt.style.use('ggplot')
 
-    adagrad_theta_values = adagrad.optimize(eps=1e-8, lr=lr, max_iter=max_iter)
-    rms_prop_theta_values = rms_prop.optimize(eps=1e-8, lr=lr, max_iter=max_iter)
-    adam_theta_values = adam.optimize(eps=1e-8, lr=lr, max_iter=max_iter)
-
+    adagrad_theta_values = adagrad.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter)
+    rms_prop_theta_values = rms_prop.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter)
+    adam_theta_values = adam.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter)
 
     # plt.title('')
     plt.xlabel('iterations')
