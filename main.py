@@ -19,14 +19,15 @@ def g(x):
 
 if __name__ == '__main__':
     lr = 0.1
-    max_iter = 10000
+    max_iter = 2000
+    tol = 1e-6
     plt.style.use('ggplot')
 
-    momentum_theta_values = momentum.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter)
-    nesterov_momentum_theta_values = nesterov_momentum.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter)
-    adagrad_theta_values = adagrad.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter)
-    rms_prop_theta_values = rms_prop.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter)
-    adam_theta_values = adam.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter)
+    momentum_theta_values = momentum.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter, tol=tol)
+    nesterov_momentum_theta_values = nesterov_momentum.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter, tol=tol)
+    adagrad_theta_values = adagrad.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter, tol=tol)
+    rms_prop_theta_values = rms_prop.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter, tol=tol)
+    adam_theta_values = adam.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter, tol=tol)
 
     # plt.title('')
     plt.xlabel('iterations')
