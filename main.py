@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 
+import gradient_descent
 import adam
 import momentum
 import nesterov_momentum
@@ -9,12 +10,12 @@ import adagrad
 
 # function
 def f(x):
-    return x * x * x * x - x * x * x - 4 * x
+    return x * x - x * x * x - 4 * x
 
 
 # gradient of function
 def g(x):
-    return 4 * x * x * x - 3 * x * x - 4
+    return 4 * x * x * x - 3 * x * x * x - 4
 
 
 if __name__ == '__main__':
@@ -23,6 +24,7 @@ if __name__ == '__main__':
     tol = 1e-6
     plt.style.use('ggplot')
 
+    gradient_descent_theta_values = gradient_descent.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter, tol=tol)
     momentum_theta_values = momentum.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter, tol=tol)
     nesterov_momentum_theta_values = nesterov_momentum.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter, tol=tol)
     adagrad_theta_values = adagrad.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter, tol=tol)
@@ -32,6 +34,7 @@ if __name__ == '__main__':
     # plt.title('')
     plt.xlabel('iterations')
     plt.ylabel('theta values')
+    plt.plot(gradient_descent_theta_values, color='black', label='gradient_descent')
     plt.plot(momentum_theta_values, color='violet', label='momentum')
     plt.plot(nesterov_momentum_theta_values, color='red', label='Nesterov momentum')
     plt.plot(adagrad_theta_values, color='green', label='adagrad')
