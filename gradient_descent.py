@@ -1,13 +1,12 @@
 import numpy as np
 import utils
-from random import randrange
 
 
-def optimize(func_grad, lr=0.01, max_iter=10000, tol=1e-6):
+def optimize(func_grad, init_theta_1, init_theta_2, lr=0.01, max_iter=10000, tol=1e-6):
     print('gradient_descent')
     # constants
-    theta_1 = randrange(10)
-    theta_2 = randrange(10)
+    theta_1 = init_theta_1
+    theta_2 = init_theta_2
 
     # lists that contain theta_1, theta_2 values and the iterations
     theta_values_1, theta_values_2, count = np.empty(0), np.empty(0), np.empty(0)
@@ -17,7 +16,6 @@ def optimize(func_grad, lr=0.01, max_iter=10000, tol=1e-6):
     lr = lr
     # max iteration stopping criterion
     max_iter = max_iter
-
 
     # list containing all loss values
     # loss_values = []
@@ -41,7 +39,7 @@ def optimize(func_grad, lr=0.01, max_iter=10000, tol=1e-6):
         t += 1
 
     if (np.abs(theta_1 - theta_prev_1) <= tol
-           or np.abs(theta_2 - theta_prev_2) <= tol):
+            or np.abs(theta_2 - theta_prev_2) <= tol):
         print(' - tol')
         utils.print_result(t, (theta_1, theta_2))
     if t > max_iter:
