@@ -30,19 +30,20 @@ if __name__ == '__main__':
     plt.style.use('ggplot')
     # ________________________________________optimizers________________________________________
     # gradient descent
-    gd_theta_values_1, gd_theta_values_2, gd_count = gradient_descent.optimize(func.grad_paraboloid,
-                                                                               init_theta_1=theta_1,
-                                                                               init_theta_2=theta_2,
-                                                                               lr=lr, max_iter=max_iter,
-                                                                               tol=tol)
+    gd_theta_values_1, gd_theta_values_2, \
+        gd_count = gradient_descent.optimize(func.grad_paraboloid,
+                                             init_theta_1=theta_1,
+                                             init_theta_2=theta_2,
+                                             lr=lr, max_iter=max_iter,
+                                             tol=tol)
     # momentum
     momentum_theta_values_1, momentum_theta_values_2, \
-    momentum_count = momentum_2.optimize(func.grad_paraboloid,
-                                         init_theta_1=theta_1,
-                                         init_theta_2=theta_2,
-                                         beta=0.9,
-                                         lr=lr, max_iter=max_iter,
-                                         tol=tol)
+        momentum_count = momentum_2.optimize(func.grad_paraboloid,
+                                             init_theta_1=theta_1,
+                                             init_theta_2=theta_2,
+                                             beta=0.9,
+                                             lr=lr, max_iter=max_iter,
+                                             tol=tol)
     # Nesterov momentum
     nesterov_mom_theta_values_1, nesterov_mom_theta_values_2, \
         nesterov_mom_count = nesterov_momentum_2.optimize(func.grad_paraboloid,
