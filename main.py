@@ -1,110 +1,141 @@
 import matplotlib.pyplot as plt
 
+import adagrad_2
+import adam_2
 import gradient_descent
 import adam
 import momentum
+import momentum_2
 import nesterov_momentum
+import nesterov_momentum_2
 import rms_prop
 import adagrad
 import numpy as np
 
+import functions as func
+from random import randrange
 
-def rosenbrock(x):
-
-    r_x = 100 * (x[1] - x[0] ** 2)**2 + (1 - x[0]) ** 2
-    return r_x
-
-
-def grad_r(x1, x2):
-    grad = [400 * np.power(x1, 3) - 400 * x1 * x2 + 2*x1 - 2, 200 * (x2 - np.power(x1, 2))]
-    return np.asarray(grad)
-
-
-# function
-def f(x):
-    return x * x - x * x * x - 4 * x
-
-
-# gradient of function
-def g(x):
-    return 4 * x * x * x - 3 * x * x * x - 4
-
+import rms_prop_2
 
 if __name__ == '__main__':
+    # constants
     lr = 0.1
-    max_iter = 2000
+    max_iter = 1000
     tol = 1e-6
+
+    # initial values of theta_1 and theta_2
+    theta_1 = randrange(10)
+    theta_2 = randrange(10)
+
     plt.style.use('ggplot')
+    # ________________________________________optimizers________________________________________
+    # gradient descent
+    gd_theta_values_1, gd_theta_values_2, gd_count = gradient_descent.optimize(func.grad_paraboloid,
+                                                                               init_theta_1=theta_1,
+                                                                               init_theta_2=theta_2,
+                                                                               lr=lr, max_iter=max_iter,
+                                                                               tol=tol)
+    # momentum
+    momentum_theta_values_1, momentum_theta_values_2, \
+    momentum_count = momentum_2.optimize(func.grad_paraboloid,
+                                         init_theta_1=theta_1,
+                                         init_theta_2=theta_2,
+                                         beta=0.9,
+                                         lr=lr, max_iter=max_iter,
+                                         tol=tol)
+    # Nesterov momentum
+    nesterov_mom_theta_values_1, nesterov_mom_theta_values_2, \
+        nesterov_mom_count = nesterov_momentum_2.optimize(func.grad_paraboloid,
+                                                          init_theta_1=theta_1,
+                                                          init_theta_2=theta_2,
+                                                          beta=0.9,
+                                                          lr=lr, max_iter=max_iter,
+                                                          tol=tol)
+    # adagrad
+    adagrad_theta_values_1, adagrad_theta_values_2, \
+        adagrad_count = adagrad_2.optimize(func.grad_paraboloid,
+                                           init_theta_1=theta_1,
+                                           init_theta_2=theta_2,
+                                           lr=lr, eps=1e-8, max_iter=max_iter,
+                                           tol=tol)
+    # rmsprop
+    rms_prop_theta_values_1, rms_prop_theta_values_2, \
+        rms_prop_count = rms_prop_2.optimize(func.grad_paraboloid,
+                                             init_theta_1=theta_1,
+                                             init_theta_2=theta_2,
+                                             beta=0.9,
+                                             lr=lr, eps=1e-8, max_iter=max_iter,
+                                             tol=tol)
+    # adam
+    adam_theta_values_1, adam_theta_values_2, \
+        adam_count = adam_2.optimize(func.grad_paraboloid,
+                                     init_theta_1=theta_1,
+                                     init_theta_2=theta_2,
+                                     beta_1=0.9, beta_2=0.999,
+                                     lr=lr, eps=1e-8, max_iter=max_iter,
+                                     tol=tol)
 
-    gradient_descent_theta_values = gradient_descent.optimize(grad_r, eps=1e-8, lr=lr, max_iter=max_iter, tol=tol)
-    momentum_theta_values = momentum.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter, tol=tol)
-    nesterov_momentum_theta_values = nesterov_momentum.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter, tol=tol)
-    adagrad_theta_values = adagrad.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter, tol=tol)
-    rms_prop_theta_values = rms_prop.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter, tol=tol)
-    adam_theta_values = adam.optimize(g, eps=1e-8, lr=lr, max_iter=max_iter, tol=tol)
+    # defining the 3D space where to compute the function
+    x = np.linspace(-2, 4, 250)
+    y = np.linspace(-2, 4, 250)
+    X, Y = np.meshgrid(x, y)
+    Z = func.paraboloid(X, Y)
 
-    functions = {
-        "Rosenbrock": [[], [], []]
-    }
+    # Angles needed for quiver plot
+    # gradient descent
+    anglesx = gd_theta_values_1[1:] - gd_theta_values_1[:-1]
+    anglesy = gd_theta_values_2[1:] - gd_theta_values_2[:-1]
 
-    for i in range(-60, 60):
-        for j in range(-60, 60):
-            functions['Rosenbrock'][0].append(i)
-            functions['Rosenbrock'][1].append(j)
-            functions['Rosenbrock'][2].append(rosenbrock((i / 10, j / 10)))
+    # create figure
+    fig = plt.figure(figsize=(16, 8))
+    # 3D plot
+    ax = fig.add_subplot(1, 2, 1, projection='3d')
+    # plot 3D function
+    ax.plot_surface(X, Y, Z, rstride=5, cstride=5, cmap='jet', alpha=.4, edgecolor='none')
 
-    xs = functions['Rosenbrock'][0]
-    ys = functions['Rosenbrock'][1]
-    zs = functions['Rosenbrock'][2]
+    # ________________________________________plotting optimizers________________________________________
+    # gradient descent 3D plot
+    ax.plot(gd_theta_values_1, gd_theta_values_2,
+            func.paraboloid(gd_theta_values_1, gd_theta_values_2),
+            color='r', marker='.', alpha=.4, label='gradient_descent')
+    # momentum 3D plot
+    ax.plot(momentum_theta_values_1, momentum_theta_values_2,
+            func.paraboloid(momentum_theta_values_1, momentum_theta_values_2),
+            color='purple', marker='.', alpha=.4, label='momentum')
+    # Nesterov momentum 3D plot
+    ax.plot(nesterov_mom_theta_values_1, nesterov_mom_theta_values_2,
+            func.paraboloid(nesterov_mom_theta_values_1, nesterov_mom_theta_values_2),
+            color='black', marker='.', alpha=.4, label='Nesterov_momentum')
+    # adagrad 3D plot
+    ax.plot(adagrad_theta_values_1, adagrad_theta_values_2,
+            func.paraboloid(adagrad_theta_values_1, adagrad_theta_values_2),
+            color='violet', marker='.', alpha=.4, label='adagrad')
+    # rms_prop 3D plot
+    ax.plot(rms_prop_theta_values_1, rms_prop_theta_values_2,
+            func.paraboloid(rms_prop_theta_values_1, rms_prop_theta_values_2),
+            color='b', marker='.', alpha=.4, label='rms_prop')
+    # adam 3D plot
+    ax.plot(adam_theta_values_1, adam_theta_values_2,
+            func.paraboloid(adam_theta_values_1, adam_theta_values_2),
+            color='orange', marker='.', alpha=.4, label='adam')
+    ax.legend()
+    ax.view_init(45, 280)
+    ax.set_xlabel('x')
+    ax.set_ylabel('y')
 
-    fig = plt.figure( figsize = (20,10))
-    ax1 = fig.add_subplot(111, projection='3d', title = 'Rosenbrock')
-    ax1.scatter(xs, ys, zs, marker='x', color = 'green', label = "data points")
+    ax = fig.add_subplot(1, 2, 2)
+    ax.contour(X, Y, Z, 50, cmap='jet')
+    # Plotting the iterations and intermediate values
+
+    # gradient descent
+    ax.scatter(gd_theta_values_1, gd_theta_values_2, color='r', marker='*')
+    # momentum
+    ax.scatter(momentum_theta_values_1, momentum_theta_values_2, color='b', marker='*')
+
+
+    ax.quiver(gd_theta_values_1[:-1], gd_theta_values_2[:-1], anglesx, anglesy,
+              scale_units='xy', angles='xy', scale=1,
+              color='r', alpha=.3)
+    # ax.set_title('Gradient Descent with {} iterations'.format(len(gd_count)))
 
     plt.show()
-    fig = plt.figure(figsize=(20, 10))
-    results = {
-        "Rosenbrock": []
-    }
-    results['Rosenbrock'].append(gradient_descent_theta_values)
-    Rosen_points = np.array(results['Rosenbrock'][0])
-    #Rosen_energy = np.array(results['Rosenbrock'][1])
-    #Rosen_temp = np.array(results['Rosenbrock'][2])
-
-    #fig = plt.figure( figsize = (20,10))
-
-    # Rosenbrock plot
-    #ax1 = fig.add_subplot(111, projection='3d', title='Rosenbrock test')
-    print(gradient_descent_theta_values)
-    xs = gradient_descent_theta_values[0]
-    ys = gradient_descent_theta_values[1]
-    xv, yv = np.meshgrid(xs, ys)
-    zs = rosenbrock((xv, yv))
-    #zs = Rosen_energy
-    ax1.scatter(xs, ys, zs, marker='o', color='green', label="data points")
-    ax1.scatter(xs[0], ys[0], zs[0], color='red', marker='*', s=100, label="initial point")
-    ax1.scatter(1., 1., 0., marker='^', s=100, color='black', label="global minimum")
-    # plt.title('')
-    plt.xlabel('iterations')
-    plt.ylabel('theta values')
-    plt.show()
-
-
-
-
-    #plt.plot(gradient_descent_theta_values, color='black', label='gradient_descent')
-    plt.plot(momentum_theta_values, color='violet', label='momentum')
-    plt.plot(nesterov_momentum_theta_values, color='red', label='Nesterov momentum')
-    plt.plot(adagrad_theta_values, color='green', label='adagrad')
-    plt.plot(rms_prop_theta_values, color='blue', label='rms_prop')
-    plt.plot(adam_theta_values, color='orange', label='adam')
-    plt.legend()
-    plt.show()
-
-    # plt.title('')
-    # plt.xlabel('iterations')
-    # plt.ylabel('loss values')
-    # plt.plot(adam_loss_values, color='orange', label='adam')
-    # plt.plot(rms_prop_loss_values, color='blue', label='rms_prop')
-    # plt.legend()
-    # plt.show()
