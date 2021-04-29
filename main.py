@@ -1,21 +1,14 @@
+import numpy as np
 import matplotlib.pyplot as plt
+from random import randrange
 
-import adagrad_2
-import adam_2
 import gradient_descent
 import adam
 import momentum
-import momentum_2
 import nesterov_momentum
-import nesterov_momentum_2
 import rms_prop
 import adagrad
-import numpy as np
-
 import functions as func
-from random import randrange
-
-import rms_prop_2
 
 if __name__ == '__main__':
     # constants
@@ -38,43 +31,43 @@ if __name__ == '__main__':
                                              tol=tol)
     # momentum
     momentum_theta_values_1, momentum_theta_values_2, \
-        momentum_count = momentum_2.optimize(func.grad_paraboloid,
-                                             init_theta_1=theta_1,
-                                             init_theta_2=theta_2,
-                                             beta=0.9,
-                                             lr=lr, max_iter=max_iter,
-                                             tol=tol)
-    # Nesterov momentum
-    nesterov_mom_theta_values_1, nesterov_mom_theta_values_2, \
-        nesterov_mom_count = nesterov_momentum_2.optimize(func.grad_paraboloid,
-                                                          init_theta_1=theta_1,
-                                                          init_theta_2=theta_2,
-                                                          beta=0.9,
-                                                          lr=lr, max_iter=max_iter,
-                                                          tol=tol)
-    # adagrad
-    adagrad_theta_values_1, adagrad_theta_values_2, \
-        adagrad_count = adagrad_2.optimize(func.grad_paraboloid,
+        momentum_count = momentum.optimize(func.grad_paraboloid,
                                            init_theta_1=theta_1,
                                            init_theta_2=theta_2,
-                                           lr=lr, eps=1e-8, max_iter=max_iter,
+                                           beta=0.9,
+                                           lr=lr, max_iter=max_iter,
                                            tol=tol)
+    # Nesterov momentum
+    nesterov_mom_theta_values_1, nesterov_mom_theta_values_2, \
+        nesterov_mom_count = nesterov_momentum.optimize(func.grad_paraboloid,
+                                                        init_theta_1=theta_1,
+                                                        init_theta_2=theta_2,
+                                                        beta=0.9,
+                                                        lr=lr, max_iter=max_iter,
+                                                        tol=tol)
+    # adagrad
+    adagrad_theta_values_1, adagrad_theta_values_2, \
+        adagrad_count = adagrad.optimize(func.grad_paraboloid,
+                                         init_theta_1=theta_1,
+                                         init_theta_2=theta_2,
+                                         lr=lr, eps=1e-8, max_iter=max_iter,
+                                         tol=tol)
     # rmsprop
     rms_prop_theta_values_1, rms_prop_theta_values_2, \
-        rms_prop_count = rms_prop_2.optimize(func.grad_paraboloid,
-                                             init_theta_1=theta_1,
-                                             init_theta_2=theta_2,
-                                             beta=0.9,
-                                             lr=lr, eps=1e-8, max_iter=max_iter,
-                                             tol=tol)
+        rms_prop_count = rms_prop.optimize(func.grad_paraboloid,
+                                           init_theta_1=theta_1,
+                                           init_theta_2=theta_2,
+                                           beta=0.9,
+                                           lr=lr, eps=1e-8, max_iter=max_iter,
+                                           tol=tol)
     # adam
     adam_theta_values_1, adam_theta_values_2, \
-        adam_count = adam_2.optimize(func.grad_paraboloid,
-                                     init_theta_1=theta_1,
-                                     init_theta_2=theta_2,
-                                     beta_1=0.9, beta_2=0.999,
-                                     lr=lr, eps=1e-8, max_iter=max_iter,
-                                     tol=tol)
+        adam_count = adam.optimize(func.grad_paraboloid,
+                                   init_theta_1=theta_1,
+                                   init_theta_2=theta_2,
+                                   beta_1=0.9, beta_2=0.999,
+                                   lr=lr, eps=1e-8, max_iter=max_iter,
+                                   tol=tol)
 
     # defining the 3D space where to compute the function
     x = np.linspace(-2, 4, 250)
@@ -132,7 +125,6 @@ if __name__ == '__main__':
     ax.scatter(gd_theta_values_1, gd_theta_values_2, color='r', marker='*')
     # momentum
     ax.scatter(momentum_theta_values_1, momentum_theta_values_2, color='b', marker='*')
-
 
     ax.quiver(gd_theta_values_1[:-1], gd_theta_values_2[:-1], anglesx, anglesy,
               scale_units='xy', angles='xy', scale=1,
