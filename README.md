@@ -16,4 +16,5 @@ The optimizers are tested and visualized using the following functions:
 
 
 [presentation](https://github.com/lucamarini22/non-linear-optimizers/blob/main/res/presentation.pdf)
+
 [website with list of functions](http://www.sfu.ca/~ssurjano/optimization.html) 
